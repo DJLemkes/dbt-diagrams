@@ -1,0 +1,27 @@
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: false });
+
+    function renderMermaid() {
+        mermaid.run({querySelector: "code.lang-mermaid, code.language-mermaid"})
+        for (const elem of document.getElementsByClassName("lang-mermaid")) {
+            elem.parentElement.style.setProperty("background", 'transparent')
+        }
+    }
+
+    // For some unknown reason, the Prism complete hook doesn't trigger
+    // when first entering the dbt docs side. This is why we subscribe to
+    // the only hook that does trigger on page load.
+    Prism.hooks.add("before-highlightall", () => {setTimeout(renderMermaid, 200)})
+
+    // Setup additional render as backup to the previous Prism hook
+    window.addEventListener("load", () => {
+        setTimeout(renderMermaid, 250)
+    });
+
+    // This one is triggered on all subsequent Prism renders. It works for
+    // all except initial page load. As an alternative to this, we could
+    // subscribe to the `popstate` browser event. This Prism hook is safer
+    // because it is guaranteed to run after the Prism highlight.
+    Prism.hooks.add("complete", renderMermaid)
+</script>

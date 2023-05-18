@@ -1,0 +1,39 @@
+name: "Check & test"
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  push:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  check-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Install Poetry
+        run: make poetry
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          cache: poetry
+
+      - name: Install dependencies
+        run: make install
+
+      - name: Check
+        run: make check
+
+      - name: Test
+        run: make test

@@ -1,0 +1,13 @@
+**/.DS_Store
+**/__pycache__
+
+.idea
+.ipynb_checkpoints
+.mypy_cache
+.vscode
+.pytest_cache
+.ruff_cache
+dist
+
+*.mmd
+*.svg
