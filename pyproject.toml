@@ -3,6 +3,9 @@ name = "dbt-diagrams"
 version = "0.1.0"
 description = "Add Mermaid rendering and model docs based ERDs to your dbt docs"
 authors = ["Diederik Jan Lemkes <dj.lemkes@gmail.com>"]
+homepage = "https://github.com/DJLemkes/dbt-diagrams"
+repository = "https://github.com/DJLemkes/dbt-diagrams"
+license = "MIT"
 readme = "README.md"
 packages = [{ include = "dbt_diagrams" }]
 include = ["resources/**"]
