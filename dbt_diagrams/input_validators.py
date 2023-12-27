@@ -4,7 +4,7 @@ import re
 from typing import Any, BinaryIO, Dict, Tuple
 import json
 
-SUPPORTED_MANIFEST_VERSIONS = {"min": 4, "max": 10}
+SUPPORTED_MANIFEST_VERSIONS = {"min": 4, "max": 11}
 SUPPORTED_CATALOG_VERSIONS = {"min": 1, "max": 1}
 
 
@@ -50,8 +50,11 @@ def verify_and_read_f(file: BinaryIO, artifact_type: DbtArtifactType) -> Dict[st
     ):
         return loaded_file
     else:
+        min_version = SUPPORTED_CATALOG_VERSIONS["min"] if artifact_type == DbtArtifactType.CATALOG else SUPPORTED_MANIFEST_VERSIONS["min"]
+        max_version = SUPPORTED_CATALOG_VERSIONS["max"] if artifact_type == DbtArtifactType.CATALOG else SUPPORTED_MANIFEST_VERSIONS["max"]
         raise ValueError(
-            f"Unknown artifact type and/or unsupported version for {artifact_type.value}."
+            f"Unknown artifact type and/or unsupported version for {artifact_type.value}. " +
+            f"Got version {version_number} but expected a version between {min_version} and {max_version}"
         )
 
 
