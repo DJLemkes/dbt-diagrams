@@ -27,13 +27,16 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install Poetry
-        run: make poetry && poetry self add "poetry-dynamic-versioning[plugin]"
+        run: make poetry
 
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
           cache: poetry
+      
+      - name: Install Poetry plugins
+        run: poetry self add "poetry-dynamic-versioning[plugin]"
 
       - name: Install dependencies
         run: make install
