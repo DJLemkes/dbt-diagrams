@@ -25,15 +25,15 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
-      
+
+      - name: Install Poetry
+        run: make poetry
+
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
           cache: poetry
-
-      - name: Install Poetry
-        run: make poetry
 
       - name: Install dependencies
         run: make install
@@ -49,14 +49,14 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
+      - name: Install Poetry
+        run: make poetry
+
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
           cache: poetry
-      
-      - name: Install Poetry
-        run: make poetry
 
       - name: Install dependencies
         run: make install

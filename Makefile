@@ -16,10 +16,8 @@ test:
 	poetry run pytest tests
 
 poetry:
-	pip3 install --upgrade pip
 	pip3 install --user poetry==1.6.1
-	poetry install
-	poetry self add 'poetry-dynamic-versioning[plugin]'
+	poetry self add "poetry-dynamic-versioning[plugin]"
 
 ruff:
 	poetry run ruff --fix .
