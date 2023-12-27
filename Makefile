@@ -1,6 +1,6 @@
 # Target section and Global definitions
 # -----------------------------------------------------------------------------
-.PHONY: all clean test run_server down black ruff code_checks
+.PHONY: all clean test run_server ruff code_checks
 
 .DEFAULT_GOAL := help
 
@@ -17,14 +17,9 @@ test:
 
 poetry:
 	pip3 install --upgrade pip
-	pip3 install poetry==1.6.1
+	pip3 install --user poetry==1.6.1
 	poetry install
-
-black-check:
-	poetry run black --check . || echo "Please run black to format your code"
-
-black:
-	poetry run black .
+	poetry self add 'poetry-dynamic-versioning[plugin]'
 
 ruff:
 	poetry run ruff --fix .
@@ -35,10 +30,10 @@ ruff-check:
 mypy:
 	poetry run mypy
 
-check: black-check ruff-check mypy
+check: ruff-check mypy
 	$(info Make: checks done!)
 
-fmt: black ruff
+fmt: ruff
 
 run-api-dev:
 	cd dbt_diagrams && uvicorn rest_api:app --reload

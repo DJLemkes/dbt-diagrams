@@ -3,11 +3,11 @@ from enum import Enum
 from pathlib import Path
 import subprocess
 import tempfile
-from typing import Optional, Dict
+from typing import Optional, Dict, TYPE_CHECKING
 
-from playwright.async_api import async_playwright
-from playwright.async_api._generated import Playwright
-from playwright.async_api import Browser
+if TYPE_CHECKING:
+    from playwright.async_api._generated import Playwright
+    from playwright.async_api import Browser
 
 
 class OutputFormat(Enum):
@@ -32,7 +32,7 @@ def write_as_mmd(mermaid_diagrams: Dict[str, str], out: Path):
             f.write(diagram)
 
 
-async def _launch_browser(async_pw_context_manager: Playwright) -> Browser:
+async def _launch_browser(async_pw_context_manager: "Playwright") -> "Browser":
     retries = 0
     while retries <= 1:
         try:
@@ -48,6 +48,7 @@ async def _launch_browser(async_pw_context_manager: Playwright) -> Browser:
 
 @asynccontextmanager
 async def get_browser():
+    from playwright.async_api import async_playwright
     async with async_playwright() as p:
         tag_selector = """
             {
@@ -66,7 +67,7 @@ async def get_browser():
         await browser.close()
 
 
-async def as_svg(mermaid_diagram: str, provided_browser: Optional[Browser] = None) -> str:
+async def as_svg(mermaid_diagram: str, provided_browser: Optional["Browser"] = None) -> str:
     async def _inner(tmp_html_path: str, browser: Browser) -> str:
         page = await browser.new_page(viewport={"width": 800, "height": 450})
         await page.goto(f"file://{tmp_html_path}")
@@ -112,7 +113,7 @@ async def as_svg(mermaid_diagram: str, provided_browser: Optional[Browser] = Non
 
 
 async def write_as_svg(
-    mermaid_diagrams: Dict[str, str], out: Path, provided_browser: Optional[Browser] = None
+    mermaid_diagrams: Dict[str, str], out: Path, provided_browser: Optional["Browser"] = None
 ):
     for diagram_name, diagram in mermaid_diagrams.items():
         svg_str = await as_svg(diagram, provided_browser)

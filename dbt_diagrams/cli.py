@@ -9,6 +9,7 @@ import traceback
 import click
 import yaml
 from dbt_diagrams.input_validators import DbtArtifactType, verify_and_read
+from dbt_diagrams import __version__
 
 from dbt_diagrams.mermaid import (
     add_mermaid_lib_to_html,
@@ -34,6 +35,7 @@ def exit_with_error(msg: str):
 
 @click.group
 @click.option("--debug", "-d", is_flag=True)
+@click.version_option(version=__version__)
 @click.pass_context
 def cli(ctx, debug):
     # ensure that ctx.obj exists and is a dict (in case `cli()` is called
@@ -92,15 +94,20 @@ async def render_erds(ctx, dbt_target_dir, manifest, catalog, format, output_dir
     elif not dbt_target_dir and not (manifest or catalog):
         exit_with_error("One of manifest file or target dir has to be specified")
     elif catalog and not manifest:
-        exit_with_error("Only catalog provided. Manifest file should be provided at a minimum.")
+        exit_with_error(
+            "Only catalog provided. Manifest file should be provided at a minimum."
+        )
     elif manifest and not catalog:
         click.secho(
-            "No catalog file specified. ERD won't have column type annotations.", fg="yellow"
+            "No catalog file specified. ERD won't have column type annotations.",
+            fg="yellow",
         )
 
     try:
         if manifest:
-            diagrams = to_mermaid_erds_from_file(Path(manifest), Path(catalog) if catalog else None)
+            diagrams = to_mermaid_erds_from_file(
+                Path(manifest), Path(catalog) if catalog else None
+            )
         elif dbt_target_dir:
             diagrams = to_mermaid_erds_from_dbt_target_dir(Path(dbt_target_dir))
         else:
@@ -166,7 +173,9 @@ def docs(ctx):
 @click.argument("docs_args", nargs=-1, type=click.UNPROCESSED)
 def generate(ctx, include_columns, docs_args):
     list_docs_args = list(docs_args)
-    subprocess.run(" ".join(["dbt", "docs", "generate"] + list_docs_args), shell=True, check=True)
+    subprocess.run(
+        " ".join(["dbt", "docs", "generate"] + list_docs_args), shell=True, check=True
+    )
     click.echo("Finished generating dbt docs. Rendering ERD's and adding Mermaid...")
 
     cli_target_path = next(
@@ -174,7 +183,8 @@ def generate(ctx, include_columns, docs_args):
             [
                 p
                 for idx, p in enumerate(list_docs_args)
-                if list_docs_args[max(0, idx - 1)] == "--target-path" and p != "--target-path"
+                if list_docs_args[max(0, idx - 1)] == "--target-path"
+                and p != "--target-path"
             ]
         ),
         None,
@@ -182,13 +192,20 @@ def generate(ctx, include_columns, docs_args):
     env_target_path = os.environ.get("DBT_TARGET_PATH")
 
     with open("./dbt_project.yml", "r") as dbt_project_file:
-        dbt_project_target_path = yaml.safe_load(dbt_project_file.read()).get("target-path")
+        dbt_project_target_path = yaml.safe_load(dbt_project_file.read()).get(
+            "target-path"
+        )
 
     target_dir = Path(
         next(
             td
             # Precendence as documented at https://docs.getdbt.com/reference/project-configs/target-path
-            for td in [cli_target_path, env_target_path, dbt_project_target_path, "./target"]
+            for td in [
+                cli_target_path,
+                env_target_path,
+                dbt_project_target_path,
+                "./target",
+            ]
             if td is not None
         )
     )
