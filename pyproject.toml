@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dbt-diagrams"
-version = "0.1.0"
+version = "0.0.0" # This is dynamically set by poetry-dynamic-versioning
 description = "Add Mermaid rendering and model docs based ERDs to your dbt docs"
 authors = ["Diederik Jan Lemkes <dj.lemkes@gmail.com>"]
 homepage = "https://github.com/DJLemkes/dbt-diagrams"
@@ -17,31 +17,32 @@ dbt-diagrams = "dbt_diagrams.cli:cli"
 python = ">=3.8,<3.12"
 click = "8.1.3"
 pyyaml = ">=6.0"
-playwright = "1.32.1"
-pydantic = "1.10.7"
+pydantic = "1.10.13"
 
-fastapi = { version = "0.95.1", optional = true }
-uvicorn = { extras = ["standard"], version = "0.22.0", optional = true }
+playwright = { version = "1.40.0", optional = true }
+fastapi = { version = "0.105.0", optional = true }
+uvicorn = { extras = ["standard"], version = "0.24.0", optional = true }
 python-multipart = { version = "0.0.6", optional = true }
 
 [tool.poetry.extras]
 rest_api = ["fastapi", "uvicorn", "python-multipart"]
-all = ["rest_api"]
+svg = ["playwright"]
+all = ["rest_api", "svg"]
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.0.262"
-black = "^23.3.0"
+ruff = "^0.1.8"
 mypy = "^1.2.0"
 pytest = "^7.3.1"
 types-pyyaml = "^6.0.12.11"
 
-[build-system]
-requires = ["poetry-core>=1.5.0"]
-build-backend = "poetry.core.masonry.api"
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+style = "semver"
 
-[tool.black]
-line-length = 100
-include = ".*\\.pyi?$|tests\\/.*\\.pyi?$"
+[build-system]
+requires = ["poetry-core>=1.5.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
+build-backend = "poetry_dynamic_versioning.backend"
 
 [tool.ruff]
 line-length = 100
