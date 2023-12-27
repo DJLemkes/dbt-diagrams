@@ -10,7 +10,7 @@ help:
 all: fmt check test
 
 install:
-	poetry install
+	poetry install --all-extras
 
 test:
 	poetry run pytest tests
