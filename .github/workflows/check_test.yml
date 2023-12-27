@@ -34,9 +34,6 @@ jobs:
         with:
           python-version: "3.11"
           cache: poetry
-      
-      - name: Install Poetry plugins
-        run: poetry self add "poetry-dynamic-versioning[plugin]"
 
       - name: Install dependencies
         run: make install
