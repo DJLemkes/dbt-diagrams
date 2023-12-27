@@ -210,16 +210,21 @@ def generate(ctx, include_columns, docs_args):
         )
     )
 
-    rendered_erds = to_mermaid_erds_from_dbt_target_dir(target_dir, include_columns)
-    manifest = verify_and_read(target_dir / "manifest.json", DbtArtifactType.MANIFEST)
-    update_docs_with_rendered_mermaid_erds(manifest, rendered_erds)
+    try:
+        rendered_erds = to_mermaid_erds_from_dbt_target_dir(target_dir, include_columns)
+        manifest = verify_and_read(target_dir / "manifest.json", DbtArtifactType.MANIFEST)
+        update_docs_with_rendered_mermaid_erds(manifest, rendered_erds)
 
-    with open(target_dir / "manifest.json", "w") as w_manifest:
-        json.dump(manifest, w_manifest)
+        with open(target_dir / "manifest.json", "w") as w_manifest:
+            json.dump(manifest, w_manifest)
 
-    add_mermaid_lib_to_html(target_dir)
+        add_mermaid_lib_to_html(target_dir)
 
-    click.secho("All done.", fg="green")
+        click.secho("All done.", fg="green")
+    except Exception as e:
+        if ctx.obj["debug"]:
+            traceback.print_exc()
+        exit_with_error(e)
 
 
 if __name__ == "__main__":
