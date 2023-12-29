@@ -1,4 +1,14 @@
-## v0.1.1
+## v0.1.2 (29-12-2023)
+
+### Improvement
+
+- Ensure compatibility for the `--static` flag in `dbt docs generate`.
+
+### Fixes
+
+- Render diagrams on back-and-forth navigation as well. Before, some diagrams went unrendered.
+
+## v0.1.1 (27-12-2023)
 
 ### Fixes
 
