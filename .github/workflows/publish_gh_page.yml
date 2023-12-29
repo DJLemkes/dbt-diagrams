@@ -31,7 +31,7 @@ jobs:
         run: poetry install
       
       - name: Build Jaffle Shop dbt docs
-        run: poetry run dbt docs generate --static
+        run: poetry run dbt-diagrams docs generate --static
 
       - name: Rename static_index.html to index.html
         run: mv ./target/static_index.html ./target/index.html
