@@ -1,0 +1,1 @@
+This folder contains a slightly adjusted [DuckDB Jaffle Shop](https://github.com/dbt-labs/jaffle_shop_duckdb) project as a demo for dbt-diagrams. The dbt docs pages are deployed to the Github Pages site of dbt-diagrams.

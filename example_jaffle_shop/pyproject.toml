@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "dbt-diagrams-jaffle-shop"
+version = "0.0.0"
+description = "Demo project for dbt-diagrams"
+authors = ["Diederik Jan Lemkes <dj.lemkes@gmail.com>"]
+homepage = "https://github.com/DJLemkes/dbt-diagrams"
+repository = "https://github.com/DJLemkes/dbt-diagrams"
+license = "MIT"
+include = ["resources/**"]
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.12"
+dbt-core = "^1.7.4"
+dbt-duckdb = "^1.7.0"
+duckcli = "^0.2.1"
+dbt-diagrams = {path = "../../dbt-diagrams", develop = true}
+
+[build-system]
+requires = ["poetry-core>=1.5.0"]
+build-backend = "poetry.core.masonry.api"
