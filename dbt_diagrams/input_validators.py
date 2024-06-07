@@ -4,7 +4,7 @@ import re
 from typing import Any, BinaryIO, Dict, Tuple
 import json
 
-SUPPORTED_MANIFEST_VERSIONS = {"min": 4, "max": 11}
+SUPPORTED_MANIFEST_VERSIONS = {"min": 4, "max": 12}
 SUPPORTED_CATALOG_VERSIONS = {"min": 1, "max": 1}
 
 
