@@ -1,3 +1,9 @@
+## v0.1.3 (07-06-2024)
+
+### Improvement
+
+- Ensure compatibility with v12 dbt manifest schema that was released as part of dbt-core v1.8.
+
 ## v0.1.2 (29-12-2023)
 
 ### Improvement
