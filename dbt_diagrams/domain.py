@@ -112,25 +112,27 @@ class Table(BaseModel, **PYDANTIC_MODEL_CONFIG):
     ) -> "Table":
         catalog_node_cols = catalog_node.get("columns", {}) if catalog_node else {}
         manifest_node_cols = manifest_node.get("columns", {})
+
+        catalog_cols_ids = list(catalog_node_cols.keys())
+        manifest_cols_ids = list(manifest_node_cols.keys())
+        # Merging lists of column ids from catalog and manifest, preserving their order
+        all_col_ids = list(set(catalog_cols_ids) - set(manifest_cols_ids)) + manifest_cols_ids
+
         # TODO: log undocumented cols
         # missing_manifest_col_ids = set(catalog_node_cols.keys()) - set(manifest_node_cols.keys())
-        all_col_ids = set(catalog_node_cols.keys()) | set(manifest_node_cols.keys())
 
         return cls(
             model_name=manifest_node["name"],
             rendered_name=manifest_node["alias"],
             target_database=manifest_node["database"],
             target_schema=manifest_node["schema"],
-            # Sort columns alphabetically
-            columns=sorted(
+            columns=
                 [
                     Column.from_manifest_catalog_node_columns(
                         manifest_node_cols.get(col_id), catalog_node_cols.get(col_id)
                     )
                     for col_id in all_col_ids
-                ],
-                key=lambda x: x.name,
-            ),
+                ]
         )
 
 
