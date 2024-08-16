@@ -27,13 +27,23 @@ def _mermaid_erd_from_relations(relations: List[Relation], include_cols: bool = 
     mentioned_tables = {
         t.model_name: t for t in itertools.chain(*([r.source, r.target] for r in relations))
     }
+    tables = list(mentioned_tables.values())
+
+    def getTableName(t):
+        return t.as_mermaid_table(include_cols)
+    tables.sort(reverse=False, key=getTableName)
+
     tables_section = "\n".join(
-        (f"\t{t.as_mermaid_table(include_cols)}\n" for t in mentioned_tables.values())
+        (f"\t{getTableName(t)}\n" for t in tables)
     )
+
+    def getRelationName(rel):
+        return rel.as_mermaid_relation()
+    relations.sort(reverse=False, key=getRelationName)
 
     relation_section = ""
     for rel in relations:
-        relation_section += f"\t{rel.as_mermaid_relation()}\n"
+        relation_section += f"\t{getRelationName(rel)}\n"
 
     return f"erDiagram\n{relation_section}\n{tables_section}"
 
@@ -52,6 +62,7 @@ def mermaid_erds_from_manifest_and_catalog(
             for node_id, node in manifest["nodes"].items()
         )
     }
+
     relations = list(
         itertools.chain(
             *(Relation.from_manifest_node(n, tables) for n in manifest["nodes"].values())
