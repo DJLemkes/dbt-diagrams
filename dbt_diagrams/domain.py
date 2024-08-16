@@ -114,9 +114,10 @@ class Table(BaseModel, **PYDANTIC_MODEL_CONFIG):
         manifest_node_cols = manifest_node.get("columns", {})
 
         catalog_cols_ids = list(catalog_node_cols.keys())
-        manifest_cols_ids = list(manifest_node_cols.keys())
-        # Merging lists of column ids from catalog and manifest, preserving their order
-        all_col_ids = list(set(catalog_cols_ids) - set(manifest_cols_ids)) + manifest_cols_ids
+        # Detecting any additional columns listed in manifest but not in catalog, sorting them alphabetically
+        manifest_cols_ids = list(set(manifest_node_cols.keys()) - set(catalog_cols_ids))
+        manifest_cols_ids.sort()
+        all_col_ids = catalog_cols_ids + manifest_cols_ids
 
         # TODO: log undocumented cols
         # missing_manifest_col_ids = set(catalog_node_cols.keys()) - set(manifest_node_cols.keys())
