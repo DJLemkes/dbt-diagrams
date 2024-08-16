@@ -89,6 +89,9 @@ async def render_erds(ctx, dbt_target_dir, manifest, catalog, format, output_dir
     with the right metadata. Check the code repository README for further instructions
     on metadata config.
     """
+    if str(output_dir) == ".":
+        output_dir = Path.cwd()
+
     if dbt_target_dir and (manifest or catalog):
         exit_with_error("Either define target dir or manifest but not both.")
     elif not dbt_target_dir and not (manifest or catalog):
@@ -124,7 +127,7 @@ async def render_erds(ctx, dbt_target_dir, manifest, catalog, format, output_dir
     else:
         write_as_mmd(diagrams, output_dir)
 
-    click.secho(f"Finished. Output written to {output_dir.cwd()}.", fg="green")
+    click.secho(f"Finished. Output written to {output_dir}", fg="green")
 
 
 # Disable REST API for now because of multi-ERD support that needs to be built-in.
