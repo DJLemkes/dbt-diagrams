@@ -197,7 +197,20 @@ def generate(ctx, include_columns, docs_args):
     )
     click.echo("Finished generating dbt docs. Rendering ERD's and adding Mermaid...")
 
-    with open("./dbt_project.yml", "r") as dbt_project_file:
+    # Getting path to dbt from supported env variables, see https://docs.getdbt.com/reference/dbt_project.yml
+    dbt_path = Path(
+        next(
+            dp
+            for dp in [
+                os.environ.get("DBT_PROJECT_DIR"),
+                os.environ.get("DBT_PROFILE_DIR"),
+                ".",
+            ]
+            if dp is not None
+        )
+    )
+
+    with open(dbt_path / "dbt_project.yml", "r") as dbt_project_file:
         dbt_project_target_path = yaml.safe_load(dbt_project_file.read()).get(
             "target-path"
         )
@@ -209,8 +222,8 @@ def generate(ctx, include_columns, docs_args):
             for td in [
                 cli_target_path,
                 env_target_path,
-                dbt_project_target_path,
-                "./target",
+                dbt_path /  dbt_project_target_path,
+                dbt_path / "target",
             ]
             if td is not None
         )
