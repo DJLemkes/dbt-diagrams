@@ -69,7 +69,8 @@ def mermaid_erds_from_manifest_and_catalog(
         )
     )
 
-    relations_by_diagram = itertools.groupby(relations, key=lambda r: r.diagram)
+    relations_sorted = sorted(relations, key=lambda r: (r.diagram, r.source.model_name, r.target.model_name))
+    relations_by_diagram = itertools.groupby(relations_sorted, key=lambda r: r.diagram)
 
     return {
         diagram_name: _add_generation_header(
