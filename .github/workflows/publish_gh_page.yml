@@ -25,16 +25,16 @@ jobs:
         uses: actions/setup-python@v5
         with:
           cache: poetry
-      
+
       - name: Install dependencies
         run: poetry install
-      
+
       - name: Build Jaffle Shop dbt docs
         run: poetry run dbt-diagrams docs generate --static
 
       - name: Rename static_index.html to index.html
         run: mv ./target/static_index.html ./target/index.html
-      
+
       - name: Push docs folder to github-pages branch.
         uses: peaceiris/actions-gh-pages@v4
         with:
@@ -42,4 +42,3 @@ jobs:
           publish_dir: "./example_jaffle_shop/target"
           keep_files: true
           publish_branch: github-pages
-

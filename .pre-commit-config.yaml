@@ -1,0 +1,40 @@
+---
+repos:
+    - repo: https://github.com/pre-commit/pre-commit-hooks
+      rev: v5.0.0
+      hooks:
+          - id: trailing-whitespace
+          - id: check-json
+          - id: check-ast
+          - id: check-merge-conflict
+          - id: check-toml
+          - id: check-yaml
+            args: [--unsafe]
+          - id: debug-statements
+          - id: detect-private-key
+          - id: end-of-file-fixer
+    - repo: local
+      hooks:
+        - id: ruff
+          name: ruff
+          entry: poetry run ruff check --force-exclude --config pyproject.toml --fix
+          language: system
+          types_or: [python, pyi, jupyter]
+          require_serial: true
+    - repo: local
+      hooks:
+        - id: ruff-format
+          name: ruff-format
+          entry: poetry run ruff format --force-exclude --config pyproject.toml
+          language: system
+          types_or: [python, pyi, jupyter]
+          require_serial: true
+    - repo: local
+      hooks:
+          - id: mypy
+            args: ["--install-types", "--explicit-package-bases", "--ignore-missing-imports", "--scripts-are-modules", "--non-interactive"]
+            entry: poetry run mypy
+            language: system
+            name: mypy
+            require_serial: true
+            types_or: [python, pyi]

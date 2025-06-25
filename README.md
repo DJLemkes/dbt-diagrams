@@ -5,7 +5,7 @@ This tool allows you to
 1. generate an Entity Relationship Diagram (ERD) based on `meta` config in your dbt model docs. Currently it relies on [Mermaid](https://mermaid.js.org/syntax/entityRelationshipDiagram.html) to render the output. You can choose to render your output inside your dbt docs directly, or store it as a separate SVG image.
 1. Enable general Mermaid rendering capabilities to your dbt docs. Every Markdown code block tagged with `mermaid` will be rendered.
 
-> [!TIP] 
+> [!TIP]
 > [Read the blog post for more details](https://medium.com/p/26bd7f8af671)
 
 > [!TIP]
