@@ -32,6 +32,7 @@ all = ["rest_api", "svg"]
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.1.8"
 mypy = "^1.2.0"
+pre-commit = "^3"
 pytest = "^7.3.1"
 types-pyyaml = "^6.0.12.11"
 
