@@ -14,12 +14,16 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
       - name: Install and configure Poetry
         uses: snok/install-poetry@v1
+        with:
+          virtualenvs-in-project: true
+          virtualenvs-path: .venv
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -27,10 +31,14 @@ jobs:
           cache: poetry
       
       - name: Install dependencies
-        run: poetry install
+        run: |
+          cd ..
+          make install
       
       - name: Build Jaffle Shop dbt docs
-        run: poetry run dbt-diagrams docs generate --static
+        run: |
+          source ../.venv/bin/activate
+          poetry run dbt-diagrams docs generate --static
 
       - name: Rename static_index.html to index.html
         run: mv ./target/static_index.html ./target/index.html

@@ -11,6 +11,7 @@ all: fmt check test
 
 install:
 	poetry install --all-extras
+	poetry self add "poetry-dynamic-versioning[plugin]"
 
 test:
 	poetry run pytest tests
