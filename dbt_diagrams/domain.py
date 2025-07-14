@@ -4,7 +4,11 @@ from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, Field, Extra
 
-PYDANTIC_MODEL_CONFIG = {"extra": Extra.forbid, "allow_mutation": False}
+
+class DomainBaseModel(BaseModel):
+    class Config:
+        extra = Extra.forbid
+        frozen = True
 
 
 class Cardinality(Enum):
@@ -30,7 +34,8 @@ class Cardinality(Enum):
         }[self]
 
 
-class MetaERDConnection(BaseModel, **PYDANTIC_MODEL_CONFIG):
+class MetaERDConnection(DomainBaseModel):
+
     target: str
     source_cardinality: Cardinality
     target_cardinality: Cardinality
@@ -38,11 +43,11 @@ class MetaERDConnection(BaseModel, **PYDANTIC_MODEL_CONFIG):
     label: Optional[str] = None
 
 
-class MetaERDSection(BaseModel, **PYDANTIC_MODEL_CONFIG):
+class MetaERDSection(DomainBaseModel):
     connections: List[MetaERDConnection] = Field(default_factory=list)
 
 
-class Column(BaseModel, **PYDANTIC_MODEL_CONFIG):
+class Column(DomainBaseModel):
     name: str
     type: Optional[str]
 
@@ -92,12 +97,15 @@ class Column(BaseModel, **PYDANTIC_MODEL_CONFIG):
         return cls(name=col_name, type=col_type)  # type: ignore [arg-type]
 
 
-class Table(BaseModel, **PYDANTIC_MODEL_CONFIG):
+class Table(DomainBaseModel):
     model_name: str
     rendered_name: str
     target_database: str
     target_schema: str
     columns: List[Column]
+    
+    class Config(DomainBaseModel.Config):
+        protected_namespaces = ()
 
     def as_mermaid_table(self, include_cols=False) -> str:
         if include_cols:
@@ -134,7 +142,7 @@ class Table(BaseModel, **PYDANTIC_MODEL_CONFIG):
         )
 
 
-class Relation(BaseModel, **PYDANTIC_MODEL_CONFIG):
+class Relation(DomainBaseModel):
     diagram: str
     source: Table
     target: Table
