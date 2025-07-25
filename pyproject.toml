@@ -30,6 +30,8 @@ svg = ["playwright"]
 all = ["rest_api", "svg"]
 
 [tool.poetry.group.dev.dependencies]
+dbt-core = "<2"
+dbt-duckdb = "<2"
 ruff = "^0.1.8"
 mypy = "^1.2.0"
 pytest = "^7.3.1"
@@ -44,9 +46,8 @@ vcs = "git"
 style = "semver"
 
 [build-system]
-requires = ["poetry-core>=1.5.0"]
-build-backend = "poetry_dynamic_versioning.backend"
-
+requires = ["poetry-core>=2.0.0"]
+build-backend = "poetry.core.masonry.api"
 [tool.ruff]
 line-length = 100
 
