@@ -70,8 +70,8 @@ class Column(BaseModel, **PYDANTIC_MODEL_CONFIG):
                 return cleaned_struct_type.replace("<", "[").replace(">", "]")
             elif "DECIMAL" in self.type.upper():  # Check uppercase version
                 return re.sub(r"DECIMAL\([^)]*\)", "decimal", self.type, flags=re.IGNORECASE)
-            else:
-                return self.type
+        else:
+            return self.type
 
 
     @classmethod
