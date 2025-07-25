@@ -70,10 +70,11 @@ class Column(BaseModel, **PYDANTIC_MODEL_CONFIG):
                 return cleaned_struct_type.replace("<", "[").replace(">", "]")
             elif "DECIMAL" in self.type.upper():  # Check uppercase version
                 return re.sub(r"DECIMAL\([^)]*\)", "decimal", self.type, flags=re.IGNORECASE)
+            else:
+                return self.type
         else:
-            return self.type
-
-
+            return None
+            
     @classmethod
     def from_manifest_catalog_node_columns(
         cls, manifest_node_col: Optional[Dict[str, Any]], catalog_node_col: Optional[Dict[str, Any]]
