@@ -76,7 +76,7 @@ def update_docs_with_rendered_mermaid_erds(manifest: Dict[str, Any], rendered_er
     TODO: this currently mutates the provided manifest in place. Pretty ugly but
     more efficient as the manifest files can get pretty big (20+ MBs).
     """
-    erd_diagram_regex = re.compile("\[.*[,erd|erd]=[\"|']([^\"']*)[\"|'].*\].*```")
+    erd_diagram_regex = re.compile(r"\[.*[,erd|erd]=[\"|']([^\"']*)[\"|'].*\]")
 
     def insert_rendered_erds_in_doc_blocks_as_mermaid(doc_block: str) -> str:
         """
