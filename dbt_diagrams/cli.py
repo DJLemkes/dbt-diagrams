@@ -89,6 +89,9 @@ async def render_erds(ctx, dbt_target_dir, manifest, catalog, format, output_dir
     with the right metadata. Check the code repository README for further instructions
     on metadata config.
     """
+    if str(output_dir) == ".":
+        output_dir = Path.cwd()
+
     if dbt_target_dir and (manifest or catalog):
         exit_with_error("Either define target dir or manifest but not both.")
     elif not dbt_target_dir and not (manifest or catalog):
@@ -124,7 +127,7 @@ async def render_erds(ctx, dbt_target_dir, manifest, catalog, format, output_dir
     else:
         write_as_mmd(diagrams, output_dir)
 
-    click.secho(f"Finished. Output written to {output_dir.cwd()}.", fg="green")
+    click.secho(f"Finished. Output written to {output_dir}", fg="green")
 
 
 # Disable REST API for now because of multi-ERD support that needs to be built-in.
@@ -194,7 +197,20 @@ def generate(ctx, include_columns, docs_args):
     )
     click.echo("Finished generating dbt docs. Rendering ERD's and adding Mermaid...")
 
-    with open("./dbt_project.yml", "r") as dbt_project_file:
+    # Getting path to dbt from supported env variables, see https://docs.getdbt.com/reference/dbt_project.yml
+    dbt_path = Path(
+        next(
+            dp
+            for dp in [
+                os.environ.get("DBT_PROJECT_DIR"),
+                os.environ.get("DBT_PROFILE_DIR"),
+                ".",
+            ]
+            if dp is not None
+        )
+    )
+
+    with open(dbt_path / "dbt_project.yml", "r") as dbt_project_file:
         dbt_project_target_path = yaml.safe_load(dbt_project_file.read()).get(
             "target-path"
         )
@@ -206,8 +222,8 @@ def generate(ctx, include_columns, docs_args):
             for td in [
                 cli_target_path,
                 env_target_path,
-                dbt_project_target_path,
-                "./target",
+                dbt_path /  dbt_project_target_path,
+                dbt_path / "target",
             ]
             if td is not None
         )
