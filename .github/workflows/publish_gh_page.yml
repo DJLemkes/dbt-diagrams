@@ -34,7 +34,7 @@ jobs:
         run: |
           cd ..
           make install
-      
+
       - name: Build Jaffle Shop dbt docs
         run: |
           source ../.venv/bin/activate
