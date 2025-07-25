@@ -16,15 +16,14 @@ jobs:
       contents: write
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Install Poetry
-        run: pip3 install poetry==1.6.1
+      - name: Install and configure Poetry
+        uses: snok/install-poetry@v1
 
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
           cache: poetry
       
       - name: Install dependencies
@@ -37,7 +36,7 @@ jobs:
         run: mv ./target/static_index.html ./target/index.html
       
       - name: Push docs folder to github-pages branch.
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: "./example_jaffle_shop/target"
