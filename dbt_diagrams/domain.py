@@ -78,15 +78,11 @@ class Column(BaseModel, **PYDANTIC_MODEL_CONFIG):
             raise ValueError("Both manifest and catalog column definitions are empty.")
 
         col_name = (
-            catalog_node_col.get("name")
-            if catalog_node_col
-            else manifest_node_col.get("name")  # type: ignore [union-attr]
+            catalog_node_col.get("name") if catalog_node_col else manifest_node_col.get("name")  # type: ignore [union-attr]
         )
 
         col_type = (
-            catalog_node_col.get("type")
-            if catalog_node_col
-            else manifest_node_col.get("data_type")  # type: ignore [union-attr]
+            catalog_node_col.get("type") if catalog_node_col else manifest_node_col.get("data_type")  # type: ignore [union-attr]
         )
 
         return cls(name=col_name, type=col_type)  # type: ignore [arg-type]
