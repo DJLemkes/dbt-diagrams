@@ -2240,4 +2240,4 @@ svg = ["playwright"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.9,<3.13"
-content-hash = "67402155deaa1143540b94c0c1791b7bfc06f3e676b8d7f64a7c1f6c770c003f"
+content-hash = "f635850875d09e7a64fe18bcf0e53341bb0dfe5c6e9f0f5991f47beb186a7149"
