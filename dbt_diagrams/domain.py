@@ -29,8 +29,8 @@ class Cardinality(Enum):
 
 
 class MetaERDConnection(BaseModel):
-    model_config = ConfigDict(extra='forbid')
-    
+    model_config = ConfigDict(extra="forbid")
+
     target: str
     source_cardinality: Cardinality
     target_cardinality: Cardinality
@@ -39,14 +39,14 @@ class MetaERDConnection(BaseModel):
 
 
 class MetaERDSection(BaseModel):
-    model_config = ConfigDict(extra='forbid')
-    
+    model_config = ConfigDict(extra="forbid")
+
     connections: List[MetaERDConnection] = Field(default_factory=list)
 
 
 class Column(BaseModel):
-    model_config = ConfigDict(extra='forbid')
-    
+    model_config = ConfigDict(extra="forbid")
+
     name: str
     type: Optional[str]
 
@@ -82,23 +82,19 @@ class Column(BaseModel):
             raise ValueError("Both manifest and catalog column definitions are empty.")
 
         col_name = (
-            catalog_node_col.get("name")
-            if catalog_node_col
-            else manifest_node_col.get("name")  # type: ignore [union-attr]
+            catalog_node_col.get("name") if catalog_node_col else manifest_node_col.get("name")  # type: ignore [union-attr]
         )
 
         col_type = (
-            catalog_node_col.get("type")
-            if catalog_node_col
-            else manifest_node_col.get("data_type")  # type: ignore [union-attr]
+            catalog_node_col.get("type") if catalog_node_col else manifest_node_col.get("data_type")  # type: ignore [union-attr]
         )
 
         return cls(name=col_name, type=col_type)  # type: ignore [arg-type]
 
 
 class Table(BaseModel):
-    model_config = ConfigDict(extra='forbid')
-    
+    model_config = ConfigDict(extra="forbid")
+
     model_name: str
     rendered_name: str
     target_database: str
@@ -141,8 +137,8 @@ class Table(BaseModel):
 
 
 class Relation(BaseModel):
-    model_config = ConfigDict(extra='forbid')
-    
+    model_config = ConfigDict(extra="forbid")
+
     diagram: str
     source: Table
     target: Table
