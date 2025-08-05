@@ -94,9 +94,7 @@ async def render_erds(ctx, dbt_target_dir, manifest, catalog, format, output_dir
     elif not dbt_target_dir and not (manifest or catalog):
         exit_with_error("One of manifest file or target dir has to be specified")
     elif catalog and not manifest:
-        exit_with_error(
-            "Only catalog provided. Manifest file should be provided at a minimum."
-        )
+        exit_with_error("Only catalog provided. Manifest file should be provided at a minimum.")
     elif manifest and not catalog:
         click.secho(
             "No catalog file specified. ERD won't have column type annotations.",
@@ -105,9 +103,7 @@ async def render_erds(ctx, dbt_target_dir, manifest, catalog, format, output_dir
 
     try:
         if manifest:
-            diagrams = to_mermaid_erds_from_file(
-                Path(manifest), Path(catalog) if catalog else None
-            )
+            diagrams = to_mermaid_erds_from_file(Path(manifest), Path(catalog) if catalog else None)
         elif dbt_target_dir:
             diagrams = to_mermaid_erds_from_dbt_target_dir(Path(dbt_target_dir))
         else:
@@ -176,9 +172,9 @@ def generate(ctx, include_columns, docs_args):
     cli_target_path = next(
         iter(
             [
-                p for idx, p in enumerate(list_docs_args)
-                if list_docs_args[max(0, idx - 1)] == "--target-path"
-                and p != "--target-path"
+                p
+                for idx, p in enumerate(list_docs_args)
+                if list_docs_args[max(0, idx - 1)] == "--target-path" and p != "--target-path"
             ]
         ),
         None,
@@ -190,14 +186,16 @@ def generate(ctx, include_columns, docs_args):
     # We manually mimic the behaviour below. If we let dbt take its normal code path, we
     # can't update the manifest.json with rendered diagrams in time.
     subprocess.run(
-        " ".join(["dbt", "docs", "generate"] + [arg for arg in list_docs_args if arg != "--static"]), shell=True, check=True
+        " ".join(
+            ["dbt", "docs", "generate"] + [arg for arg in list_docs_args if arg != "--static"]
+        ),
+        shell=True,
+        check=True,
     )
     click.echo("Finished generating dbt docs. Rendering ERD's and adding Mermaid...")
 
     with open("./dbt_project.yml", "r") as dbt_project_file:
-        dbt_project_target_path = yaml.safe_load(dbt_project_file.read()).get(
-            "target-path"
-        )
+        dbt_project_target_path = yaml.safe_load(dbt_project_file.read()).get("target-path")
 
     target_dir = Path(
         next(
@@ -227,18 +225,17 @@ def generate(ctx, include_columns, docs_args):
         if static_docs_page:
             manifest = verify_and_read(target_dir / "manifest.json", DbtArtifactType.MANIFEST)
             catalog = verify_and_read(target_dir / "catalog.json", DbtArtifactType.CATALOG)
-            
+
             # This setup comes straight from
             # https://github.com/mescanne/dbt-core/blob/e8c8eb2b7fc64e0db2817de0b538780d56c7fd99/core/dbt/task/generate.py#L280
             with open(target_dir / "index.html", "r") as index_html_handle:
                 index_html = index_html_handle.read()
-            
+
             index_html = index_html.replace('"MANIFEST.JSON INLINE DATA"', json.dumps(manifest))
             index_html = index_html.replace('"CATALOG.JSON INLINE DATA"', json.dumps(catalog))
-            
+
             with open(target_dir / "static_index.html", "w") as s_index_html_handle:
                 s_index_html_handle.write(index_html)
-
 
         click.secho("All done.", fg="green")
     except Exception as e:
