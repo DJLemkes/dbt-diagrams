@@ -50,11 +50,19 @@ def verify_and_read_f(file: BinaryIO, artifact_type: DbtArtifactType) -> Dict[st
     ):
         return loaded_file
     else:
-        min_version = SUPPORTED_CATALOG_VERSIONS["min"] if artifact_type == DbtArtifactType.CATALOG else SUPPORTED_MANIFEST_VERSIONS["min"]
-        max_version = SUPPORTED_CATALOG_VERSIONS["max"] if artifact_type == DbtArtifactType.CATALOG else SUPPORTED_MANIFEST_VERSIONS["max"]
+        min_version = (
+            SUPPORTED_CATALOG_VERSIONS["min"]
+            if artifact_type == DbtArtifactType.CATALOG
+            else SUPPORTED_MANIFEST_VERSIONS["min"]
+        )
+        max_version = (
+            SUPPORTED_CATALOG_VERSIONS["max"]
+            if artifact_type == DbtArtifactType.CATALOG
+            else SUPPORTED_MANIFEST_VERSIONS["max"]
+        )
         raise ValueError(
-            f"Unknown artifact type and/or unsupported version for {artifact_type.value}. " +
-            f"Got version {version_number} but expected a version between {min_version} and {max_version}"
+            f"Unknown artifact type and/or unsupported version for {artifact_type.value}. "
+            + f"Got version {version_number} but expected a version between {min_version} and {max_version}"
         )
 
 
