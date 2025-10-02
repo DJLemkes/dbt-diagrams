@@ -67,6 +67,7 @@ models:
 Using the `meta` section of a model, you can define ERD connections to other models. Based on these connections and other table attributes the ERD can be generated. The `target` attribute is another dbt model name. Accepted relation cardinalities are `one`, `zero_or_one`, `zero_or_more` or `one_or_more`. Use the `label` attribute to specify a human readable interpretation to a relation. The `diagram` is optional and allows you to add a name to your ERD. This is useful in case you want to define multiple ERDs and reference them in dbt docs directly.
 
 Notice the `mermaid[erd="cusomer_erd"]` expressions in the `customers` and `orders` model descriptions. When running `dbt-diagrams docs generate`, this will be replaced by the ERD Mermaid definition so that your ERD can be rendered in any dbt docs page.
+After generating the docs, you can run `dbt-diagrams docs serve` to view the docs with the rendered Mermaid diagrams. This command preserves the embedded diagrams (unlike `dbt docs serve`, which would regenerate the HTML and remove them).
 
 ```mermaid
 erDiagram
