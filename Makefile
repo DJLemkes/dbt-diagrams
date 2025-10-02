@@ -7,8 +7,6 @@
 help:
 	$(info Make: Please run one of the targets)
 
-all: fmt check test
-
 install:
 	poetry install --all-extras
 	poetry self add "poetry-dynamic-versioning[plugin]"
@@ -18,15 +16,6 @@ test:
 
 ruff:
 	poetry run ruff --fix .
-
-ruff-check:
-	poetry run ruff .
-
-mypy:
-	poetry run mypy
-
-check: ruff-check mypy
-	$(info Make: checks done!)
 
 fmt: ruff
 

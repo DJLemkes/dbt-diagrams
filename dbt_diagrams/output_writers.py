@@ -3,7 +3,7 @@ from enum import Enum
 from pathlib import Path
 import subprocess
 import tempfile
-from typing import Optional, Dict, TYPE_CHECKING
+from typing import Optional, Dict, TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from playwright.async_api._generated import Playwright
@@ -49,6 +49,7 @@ async def _launch_browser(async_pw_context_manager: "Playwright") -> "Browser":
 @asynccontextmanager
 async def get_browser():
     from playwright.async_api import async_playwright
+
     async with async_playwright() as p:
         tag_selector = """
             {
@@ -67,8 +68,8 @@ async def get_browser():
         await browser.close()
 
 
-async def as_svg(mermaid_diagram: str, provided_browser: Optional["Browser"] = None) -> str:
-    async def _inner(tmp_html_path: str, browser: Browser) -> str:
+async def as_svg(mermaid_diagram: str, provided_browser: Optional["Browser"] = None) -> Any:
+    async def _inner(tmp_html_path: str, browser: Browser) -> Any:
         page = await browser.new_page(viewport={"width": 800, "height": 450})
         await page.goto(f"file://{tmp_html_path}")
         await page.wait_for_load_state("load")
@@ -100,9 +101,7 @@ async def as_svg(mermaid_diagram: str, provided_browser: Optional["Browser"] = N
                             </script>
                         </body>
                         </html>
-                        """.format(
-                mermaid_diagram
-            )
+                        """.format(mermaid_diagram)
             tmp_html.write(html)
 
         if provided_browser:
