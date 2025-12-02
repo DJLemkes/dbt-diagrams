@@ -1,3 +1,15 @@
+## v0.2.0 (03-12-2025)
+
+### Additions
+- `dbt-diagrams docs serve` for local ERD testing.
+
+### Improvement
+- Python 3.9–3.12 support.
+- Migration to Pydantic 2, Poetry 2, and updated CI/GitHub Pages setup.
+
+### Fixes
+- Correct Mermaid rendering for decimal datatypes.
+
 ## v0.1.3 (07-06-2024)
 
 ### Improvement
