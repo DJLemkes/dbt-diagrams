@@ -30,7 +30,7 @@ jobs:
         uses: snok/install-poetry@v1
 
       - name: Setup Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           cache: poetry
 
@@ -61,7 +61,7 @@ jobs:
         uses: snok/install-poetry@v1
 
       - name: Setup Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           cache: poetry
           python-version: ${{ matrix.python-version }}
